@@ -23,7 +23,7 @@ export default function Home() {
   const objectUrlRef = useRef(null);
 
   const [ready, setReady] = useState(false);
-  const [status, setStatus] = useState("Loading OpenCV...");
+  const [status, setStatus] = useState("");
   const [step, setStep] = useState(12);
   const [canny1, setCanny1] = useState(80);
   const [canny2, setCanny2] = useState(160);
@@ -32,7 +32,6 @@ export default function Home() {
     // opencv-ts exports cv immediately, but runtime may need a tick in some envs
     const t = setTimeout(() => {
       setReady(true);
-      setStatus("OpenCV ready. Upload an image.");
     }, 0);
 
     return () => {
@@ -133,52 +132,210 @@ export default function Home() {
   };
 
   return (
-    <main style={{ padding: 20, color: "#e5e7eb", background: "#0f172a", minHeight: "100vh" }}>
-      <h2 style={{ fontSize: 22, marginBottom: 10 }}>OpenCV.js Contours + Point Plotting</h2>
+    <main style={{ 
+      padding: "32px 24px", 
+      color: "#e5e7eb", 
+      background: "#000000", 
+      minHeight: "100vh",
+      fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif"
+    }}>
+      <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
+        <h1 style={{ 
+          fontSize: "32px", 
+          marginBottom: "8px",
+          fontWeight: 600,
+          color: "#10b981",
+          letterSpacing: "-0.5px"
+        }}>
+          EdgeScan Contours
+        </h1>
+        <p style={{ 
+          fontSize: "14px", 
+          marginBottom: "32px",
+          color: "#9ca3af",
+          fontWeight: 400
+        }}>
+          Point Plotting & Edge Detection
+        </p>
 
-      <div style={{ display: "flex", gap: 16, flexWrap: "wrap", alignItems: "flex-start" }}>
-        <div style={{ width: 320, background: "#020617", border: "1px solid #1e293b", borderRadius: 12, padding: 12 }}>
-          <input type="file" accept="image/*" onChange={onFile} disabled={!ready} />
-          <div style={{ marginTop: 10, fontSize: 12, opacity: 0.9, lineHeight: 1.4 }}>{status}</div>
+        <div style={{ display: "flex", gap: "24px", flexWrap: "wrap", alignItems: "flex-start" }}>
+          <div style={{ 
+            width: "360px", 
+            background: "#0a0a0a", 
+            border: "1px solid #1a1a1a", 
+            borderRadius: "16px", 
+            padding: "24px",
+            boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2)"
+          }}>
+            <div style={{ marginBottom: "20px" }}>
+              <label style={{ 
+                display: "block",
+                fontSize: "13px",
+                fontWeight: 500,
+                color: "#10b981",
+                marginBottom: "8px",
+                textTransform: "uppercase",
+                letterSpacing: "0.5px"
+              }}>
+                Upload Image
+              </label>
+              <input 
+                type="file" 
+                accept="image/*" 
+                onChange={onFile} 
+                disabled={!ready}
+                style={{
+                  width: "100%",
+                  padding: "10px",
+                  background: "#10b981",
+                  border: "1px solid #059669",
+                  borderRadius: "8px",
+                  color: "#000000",
+                  fontSize: "13px",
+                  cursor: ready ? "pointer" : "not-allowed",
+                  opacity: ready ? 1 : 0.5,
+                  transition: "all 0.2s ease",
+                  fontWeight: 500
+                }}
+              />
+            </div>
 
-          <div style={{ marginTop: 12 }}>
-            <label style={{ fontSize: 12 }}>Plot every Nth point: {step}</label>
-            <input type="range" min="1" max="30" value={step} onChange={(e) => setStep(e.target.value)} style={{ width: "100%" }} disabled={!ready} />
+            <div style={{ marginTop: "24px", marginBottom: "20px" }}>
+              <label style={{ 
+                display: "block",
+                fontSize: "12px", 
+                fontWeight: 500,
+                color: "#d1d5db",
+                marginBottom: "8px"
+              }}>
+                Plot every Nth point: <span style={{ color: "#10b981", fontWeight: 600 }}>{step}</span>
+              </label>
+              <input 
+                type="range" 
+                min="1" 
+                max="30" 
+                value={step} 
+                onChange={(e) => setStep(e.target.value)} 
+                disabled={!ready}
+                style={{ 
+                  width: "100%",
+                  accentColor: "#10b981",
+                  cursor: ready ? "pointer" : "not-allowed",
+                  opacity: ready ? 1 : 0.5
+                }} 
+              />
+            </div>
+
+            <div style={{ marginBottom: "20px" }}>
+              <label style={{ 
+                display: "block",
+                fontSize: "12px", 
+                fontWeight: 500,
+                color: "#d1d5db",
+                marginBottom: "8px"
+              }}>
+                Canny threshold1: <span style={{ color: "#10b981", fontWeight: 600 }}>{canny1}</span>
+              </label>
+              <input 
+                type="range" 
+                min="0" 
+                max="300" 
+                value={canny1} 
+                onChange={(e) => setCanny1(e.target.value)} 
+                disabled={!ready}
+                style={{ 
+                  width: "100%",
+                  accentColor: "#10b981",
+                  cursor: ready ? "pointer" : "not-allowed",
+                  opacity: ready ? 1 : 0.5
+                }} 
+              />
+            </div>
+
+            <div style={{ marginBottom: "24px" }}>
+              <label style={{ 
+                display: "block",
+                fontSize: "12px", 
+                fontWeight: 500,
+                color: "#d1d5db",
+                marginBottom: "8px"
+              }}>
+                Canny threshold2: <span style={{ color: "#10b981", fontWeight: 600 }}>{canny2}</span>
+              </label>
+              <input 
+                type="range" 
+                min="0" 
+                max="400" 
+                value={canny2} 
+                onChange={(e) => setCanny2(e.target.value)} 
+                disabled={!ready}
+                style={{ 
+                  width: "100%",
+                  accentColor: "#10b981",
+                  cursor: ready ? "pointer" : "not-allowed",
+                  opacity: ready ? 1 : 0.5
+                }} 
+              />
+            </div>
+
+            <button
+              onClick={runContours}
+              disabled={!ready}
+              style={{
+                width: "100%",
+                padding: "14px",
+                borderRadius: "10px",
+                border: "none",
+                background: ready ? "#10b981" : "#1a1a1a",
+                color: ready ? "#000000" : "#4b5563",
+                fontWeight: 600,
+                fontSize: "14px",
+                cursor: ready ? "pointer" : "not-allowed",
+                transition: "all 0.2s ease",
+                boxShadow: ready ? "0 4px 14px 0 rgba(16, 185, 129, 0.2)" : "none",
+                transform: ready ? "translateY(0)" : "none"
+              }}
+              onMouseEnter={(e) => {
+                if (ready) {
+                  e.target.style.background = "#059669";
+                  e.target.style.transform = "translateY(-1px)";
+                  e.target.style.boxShadow = "0 6px 20px 0 rgba(16, 185, 129, 0.3)";
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (ready) {
+                  e.target.style.background = "#10b981";
+                  e.target.style.transform = "translateY(0)";
+                  e.target.style.boxShadow = "0 4px 14px 0 rgba(16, 185, 129, 0.2)";
+                }
+              }}
+            >
+              Detect Contours
+            </button>
+
+            <img ref={imgRef} alt="" style={{ display: "none" }} onLoad={() => setStatus("Image loaded. Click 'Detect Contours'.")} />
           </div>
 
-          <div style={{ marginTop: 12 }}>
-            <label style={{ fontSize: 12 }}>Canny threshold1: {canny1}</label>
-            <input type="range" min="0" max="300" value={canny1} onChange={(e) => setCanny1(e.target.value)} style={{ width: "100%" }} disabled={!ready} />
+          <div style={{ flex: 1, minWidth: "400px" }}>
+            <div style={{
+              background: "#0a0a0a",
+              border: "1px solid #1a1a1a",
+              borderRadius: "16px",
+              padding: "16px",
+              boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2)"
+            }}>
+              <canvas 
+                ref={canvasRef} 
+                style={{ 
+                  width: "100%",
+                  height: "auto",
+                  borderRadius: "8px",
+                  background: "#000000",
+                  display: "block"
+                }} 
+              />
+            </div>
           </div>
-
-          <div style={{ marginTop: 12 }}>
-            <label style={{ fontSize: 12 }}>Canny threshold2: {canny2}</label>
-            <input type="range" min="0" max="400" value={canny2} onChange={(e) => setCanny2(e.target.value)} style={{ width: "100%" }} disabled={!ready} />
-          </div>
-
-          <button
-            onClick={runContours}
-            disabled={!ready}
-            style={{
-              width: "100%",
-              marginTop: 12,
-              padding: 10,
-              borderRadius: 10,
-              border: 0,
-              background: ready ? "#22c55e" : "#334155",
-              color: "#052e16",
-              fontWeight: 700,
-              cursor: ready ? "pointer" : "not-allowed",
-            }}
-          >
-            Detect Contours
-          </button>
-
-          <img ref={imgRef} alt="" style={{ display: "none" }} onLoad={() => setStatus("Image loaded. Click 'Detect Contours'.")} />
-        </div>
-
-        <div>
-          <canvas ref={canvasRef} style={{ border: "1px solid #1e293b", borderRadius: 12, background: "#020617" }} />
         </div>
       </div>
     </main>
